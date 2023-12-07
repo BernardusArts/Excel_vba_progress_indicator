@@ -1,0 +1,102 @@
+Private Sub CommandButton1_Click()
+Dim x As Integer
+DataProcessing
+
+DoEvents
+For x = 1 To 100
+    Sleep 50
+    ProgressBar (CDbl(x))
+    DoEvents
+Next x
+
+End Sub
+
+Sub ProgressBar(ProgressValue As Double)
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim ProgressBar As Shape
+    Dim ProgressBarBorder As Shape
+    Dim ProgressCell As Range
+    Dim shp As Shape
+    Dim ShpExist As Boolean
+    Dim ShpBrdrExist As Boolean
+''Dim ProgressValue As Double 
+''ProgressValue = 10
+    ShpExist = False '' progress bar
+    ShpBrdrExist = False '' progress bar border
+    
+    If ProgressValue > 0 And ProgressValue < 101 Then
+        
+        
+        ''search shape border
+        For Each shp In ThisWorkbook.Worksheets(CurvetracerSht).Shapes
+        If shp.Name = "ProgressBarBorder" Then
+            Set ProgressBarBorder = ThisWorkbook.Worksheets(CurvetracerSht).Shapes(shp.Name)
+            ShpBrdrExist = True
+            Exit For
+        End If
+       Next
+     
+        
+       '' search shape progress bar
+       For Each shp In ThisWorkbook.Worksheets(CurvetracerSht).Shapes
+        If shp.Name = "ProgressBar" Then
+            Set ProgressBar = ThisWorkbook.Worksheets(CurvetracerSht).Shapes(shp.Name)
+            ShpExist = True
+            Exit For
+        End If
+       Next
+        
+        ' Set the worksheet and range for the progress bar
+        Set ws = ThisWorkbook.Worksheets(CurvetracerSht) ' Replace with the name of your worksheet
+        Set rng = ws.Range("F20") ' Replace with the cell where you want to position the progress bar
+        
+        '' Set the range for the progress value
+        '' Set ProgressCell = ws.Range("J18") ' Replace with the cell containing the progress value
+        
+        '' Get the progress value from the cell
+        '' ProgressValue = ProgressCell.Value
+        '' Create the progress bar shape if not exist
+        '' Set progressBar = ws.Shapes.AddShape(msoShapeRectangle, rng.Left, rng.Top, rng.Width * progressValue, rng.Height)
+
+       
+        If ShpBrdrExist = False Then
+            Set ProgressBarBorder = ws.Shapes.AddShape(msoShapeRectangle, rng.Left - 1, rng.Top + (rng.Height / 4) - 1, 103, (rng.Height / 2) + 2) '' witdh 100 %
+            ProgressBarBorder.Name = "ProgressBarBorder"
+          
+            ' Customize the progress bar appearance
+            With ProgressBarBorder
+                .Line.Visible = True
+                .Fill.Visible = msoFalse
+                .ZOrder msoSendToBack
+            End With
+     
+            Set ProgressBarBorder = Nothing
+        End If
+       
+       
+        If ShpExist = False Then
+            Set ProgressBar = ws.Shapes.AddShape(msoShapeRectangle, rng.Left, rng.Top + (rng.Height / 4), ProgressValue, rng.Height / 2) ''progress value 1 to 100
+            ProgressBar.Name = "ProgressBar"
+        End If
+        
+        ' Customize the progress bar appearance
+        With ProgressBar
+            .Fill.ForeColor.RGB = RGB(0, 0, 255) ' blue color
+            .Line.Visible = False
+        End With
+        
+        ' Adjust the shape properties to match the progress value
+        With rng
+            ProgressBar.Left = .Left
+            ProgressBar.Top = .Top + (.Height / 4)
+            ProgressBar.Width = ProgressValue
+            ProgressBar.Height = .Height / 2
+        End With
+        
+        Set ProgressBar = Nothing
+
+    End If ''progressvalue <...
+    
+End Sub
+
