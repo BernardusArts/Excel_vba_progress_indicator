@@ -1,6 +1,8 @@
+‘’add below code in Sheet1 
+
 Private Sub CommandButton1_Click()
 Dim x As Integer
-DataProcessing
+
 
 DoEvents
 For x = 1 To 100
@@ -10,6 +12,11 @@ For x = 1 To 100
 Next x
 
 End Sub
+
+
+‘’ add code below in module1
+Option Explicit
+Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal Milliseconds As LongPtr)
 
 Sub ProgressBar(ProgressValue As Double)
     Dim ws As Worksheet
@@ -29,9 +36,9 @@ Sub ProgressBar(ProgressValue As Double)
         
         
         ''search shape border
-        For Each shp In ThisWorkbook.Worksheets(CurvetracerSht).Shapes
+        For Each shp In ThisWorkbook.Worksheets("Sheet1").Shapes
         If shp.Name = "ProgressBarBorder" Then
-            Set ProgressBarBorder = ThisWorkbook.Worksheets(CurvetracerSht).Shapes(shp.Name)
+            Set ProgressBarBorder = ThisWorkbook.Worksheets("Sheet1").Shapes(shp.Name)
             ShpBrdrExist = True
             Exit For
         End If
@@ -39,16 +46,16 @@ Sub ProgressBar(ProgressValue As Double)
      
         
        '' search shape progress bar
-       For Each shp In ThisWorkbook.Worksheets(CurvetracerSht).Shapes
+       For Each shp In ThisWorkbook.Worksheets("Sheet1").Shapes
         If shp.Name = "ProgressBar" Then
-            Set ProgressBar = ThisWorkbook.Worksheets(CurvetracerSht).Shapes(shp.Name)
+            Set ProgressBar = ThisWorkbook.Worksheets("Sheet1").Shapes(shp.Name)
             ShpExist = True
             Exit For
         End If
        Next
         
         ' Set the worksheet and range for the progress bar
-        Set ws = ThisWorkbook.Worksheets(CurvetracerSht) ' Replace with the name of your worksheet
+        Set ws = ThisWorkbook.Worksheets("Sheet1") ' Replace with the name of your worksheet
         Set rng = ws.Range("F20") ' Replace with the cell where you want to position the progress bar
         
         '' Set the range for the progress value
